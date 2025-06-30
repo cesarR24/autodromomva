@@ -1,0 +1,57 @@
+/* Paleta y estilos modernos para drag racing */
+body {
+  background: #18181b;
+  color: #fff;
+  font-family: 'Inter', Arial, sans-serif;
+}
+
+h1, h2, h3, .contrast-title {
+  font-family: 'Oswald', 'Bebas Neue', Arial Black, sans-serif;
+}
+
+button, .btn {
+  border-radius: 0.75rem;
+  font-family: 'Oswald', sans-serif;
+  font-weight: bold;
+  letter-spacing: 0.04em;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+}
+
+button:focus {
+  outline: 2px solid #e11d48;
+  outline-offset: 2px;
+}
+
+.bg-card {
+  background: linear-gradient(135deg, #18181b 60%, #23272f 100%);
+  border: 2px solid #e11d48;
+  border-radius: 1.25rem;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.25);
+}
+
+input, select {
+  background: #23272f;
+  color: #fff;
+  border: 2px solid #e11d48;
+  border-radius: 0.75rem;
+  padding: 0.75rem 1rem;
+  font-family: 'Inter', Arial, sans-serif;
+  font-size: 1rem;
+}
+
+input:focus, select:focus {
+  border-color: #fbbf24;
+  background: #18181b;
+}
+
+.material-icons {
+  vertical-align: middle;
+  font-size: 1.2em;
+}
+
+/* Overlay para asegurar contraste */
+.bg-overlay {
+  background: linear-gradient(180deg, rgba(0,0,0,0.95) 0%, rgba(24,24,27,0.85) 100%);
+  backdrop-filter: blur(4px);
+}

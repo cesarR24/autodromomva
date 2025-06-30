@@ -1,0 +1,70 @@
+<div class="relative min-h-screen w-full flex flex-col items-center justify-center bg-black overflow-x-hidden">
+  <img src="/background.jpg" alt="Fondo login" class="fixed inset-0 w-full h-full object-cover z-0 opacity-80" />
+  <div class="fixed inset-0 bg-gradient-to-b from-black/90 via-black/70 to-black/90 z-10"></div>
+  <div class="relative z-20 w-full max-w-6xl space-y-12 bg-black/80 rounded-3xl shadow-2xl p-20 mx-auto">
+    <div class="flex justify-center mb-8">
+      <img src="/logo-monclova.png" alt="Autódromo Monclova" class="h-32 md:h-40 w-auto" />
+    </div>
+    <div>
+      <h2 class="mt-8 text-center text-5xl font-extrabold text-gray-100" style="font-family: 'Oswald', sans-serif;">Iniciar Sesión</h2>
+    </div>
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate class="mt-12 space-y-10">
+      <div class="rounded-2xl shadow-lg -space-y-px">
+        <div>
+          <label for="email" class="sr-only">Email</label>
+          <input id="email" name="email" type="email" formControlName="email" required placeholder="Email" class="appearance-none rounded-t-2xl relative block w-full px-6 py-5 border-2 border-gray-400 placeholder-gray-500 text-2xl text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10" />
+        </div>
+        <div>
+          <label for="password" class="sr-only">Contraseña</label>
+          <input id="password" name="password" type="password" formControlName="password" required placeholder="Contraseña" class="appearance-none rounded-b-2xl relative block w-full px-6 py-5 border-2 border-gray-400 placeholder-gray-500 text-2xl text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10" />
+        </div>
+      </div>
+      <div>
+        <button type="submit" class="group relative w-full flex justify-center py-5 px-8 border border-transparent text-2xl font-bold rounded-2xl text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50">Ingresar</button>
+      </div>
+      <div class="flex space-x-6">
+        <button type="button" (click)="loginWithCustomToken()" class="flex-1 bg-green-600 hover:bg-green-700 text-white px-8 py-5 rounded-2xl text-2xl font-bold">Token</button>
+      </div>
+      <div class="text-center mt-8 text-xl">
+        <span>¿No tienes cuenta?</span>
+        <button type="button" (click)="switchMode()" class="text-blue-400 hover:underline ml-2 text-2xl font-bold">Regístrate</button>
+      </div>
+    </form>
+
+    <form *ngIf="isRegisterMode" class="mt-8 space-y-6" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <div class="rounded-md shadow-sm -space-y-px">
+        <div>
+          <label for="name" class="sr-only">Nombre</label>
+          <input id="name" name="name" type="text" formControlName="name" required
+                 class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+                 placeholder="Nombre">
+        </div>
+        <div>
+          <label for="email" class="sr-only">Email</label>
+          <input id="email" name="email" type="email" formControlName="email" required 
+                 class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" 
+                 placeholder="Email">
+        </div>
+        <div>
+          <label for="password" class="sr-only">Contraseña</label>
+          <input id="password" name="password" type="password" formControlName="password" required 
+                 class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" 
+                 placeholder="Contraseña">
+        </div>
+      </div>
+
+      <div *ngIf="errorMessage" class="mb-4 text-red-600 text-center">{{ errorMessage }}</div>
+
+      <div>
+        <button type="submit" [disabled]="isLoading || registerForm.invalid" 
+                class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50">
+          {{ isLoading ? 'Registrando...' : 'Registrarse' }}
+        </button>
+      </div>
+      <div class="text-center mt-4">
+        <span>¿Ya tienes cuenta?</span>
+        <button type="button" (click)="switchMode()" class="text-blue-600 hover:underline ml-1">Inicia sesión</button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,74 @@
+<div class="relative min-h-screen w-full flex flex-col items-center justify-start bg-black overflow-x-hidden">
+  <!-- Fondo de imagen racing -->
+  <img src="/background2.jpg" alt="Fondo carreras" class="fixed inset-0 w-full h-full object-cover z-0 opacity-80" />
+  <!-- Overlay oscuro para contraste -->
+  <div class="fixed inset-0 bg-gradient-to-b from-black/95 via-black/80 to-black/95 z-10 backdrop-blur-md"></div>
+
+  <!-- Logo y título -->
+  <div class="relative z-20 flex flex-col items-center mt-8 mb-6 w-full">
+    <img src="/logo-monclova.png" alt="Autódromo Monclova" class="h-24 md:h-32 w-auto mb-4 drop-shadow-xl mx-auto" />
+    <h1 class="text-5xl md:text-6xl font-extrabold italic text-white tracking-widest drop-shadow-lg mb-2" style="font-family: 'Oswald', 'Arial Black', sans-serif; letter-spacing: 0.1em;">DRAGRUSH</h1>
+  </div>
+
+  <!-- Temporizador y notificación para pilotos -->
+  <div *ngIf="showTimer || showToaster" class="relative z-30 flex flex-col items-center mb-6 w-full">
+    <div *ngIf="showToaster" class="mb-4 px-6 py-3 rounded-full bg-red-600 text-white font-bold shadow-lg text-lg flex items-center gap-2 animate-bounce">
+      <span class="material-icons text-yellow-300">warning</span>
+      {{ toasterMessage }}
+    </div>
+    <div *ngIf="showTimer" class="flex flex-col items-center">
+      <div class="relative flex items-center justify-center mb-2">
+        <svg width="110" height="110" class="block">
+          <circle cx="55" cy="55" r="48" stroke="#dc2626" stroke-width="10" fill="none" opacity="0.2" />
+          <circle cx="55" cy="55" r="48" [attr.stroke-dasharray]="2 * 3.1416 * 48" [attr.stroke-dashoffset]="(2 * 3.1416 * 48) * (1 - (activeMatchTimer.remaining / activeMatchTimer.duration))" stroke="#dc2626" stroke-width="10" fill="none" stroke-linecap="round" style="transition: stroke-dashoffset 1s linear;" />
+        </svg>
+        <span class="absolute text-3xl font-extrabold text-red-600 font-mono drop-shadow-lg">{{ getTimerDisplay() }}</span>
+      </div>
+      <div class="text-red-600 font-bold text-lg mt-1">¡Debes estar listo antes de que termine el tiempo!</div>
+      <div *ngIf="activeMatchTimer.remaining === 0" class="text-yellow-400 font-bold text-lg mt-2">¡Tiempo terminado! Si no estás en la línea, serás descalificado.</div>
+    </div>
+  </div>
+
+  <!-- Menú de opciones tipo gaming -->
+  <div class="relative z-20 w-full max-w-xl flex flex-col gap-5 mt-8 mb-12 px-4">
+    <a routerLink="/race-results" class="flex items-center gap-4 bg-black/80 border-2 border-red-600 rounded-2xl px-6 py-5 text-white text-xl font-bold shadow-lg hover:bg-red-700 hover:border-white transition-all duration-300 drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)]" style="font-family: 'Oswald', sans-serif;">
+      <span class="material-icons text-yellow-400 text-3xl">flag</span> <span class="contrast-title">Resultados</span>
+    </a>
+    <a routerLink="/brackets" class="flex items-center gap-4 bg-black/80 border-2 border-red-600 rounded-2xl px-6 py-5 text-white text-xl font-bold shadow-lg hover:bg-red-700 hover:border-white transition-all duration-300 drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)]" style="font-family: 'Oswald', sans-serif;">
+      <span class="material-icons text-blue-400 text-3xl">sports_motorsports</span> <span class="contrast-title">Brackets</span>
+    </a>
+    <a routerLink="/overall-points" class="flex items-center gap-4 bg-black/80 border-2 border-red-600 rounded-2xl px-6 py-5 text-white text-xl font-bold shadow-lg hover:bg-red-700 hover:border-white transition-all duration-300 drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)]" style="font-family: 'Oswald', sans-serif;">
+      <span class="material-icons text-green-400 text-3xl">leaderboard</span> <span class="contrast-title">Puntos</span>
+    </a>
+    <a routerLink="/profile" class="flex items-center gap-4 bg-black/80 border-2 border-red-600 rounded-2xl px-6 py-5 text-white text-xl font-bold shadow-lg hover:bg-red-700 hover:border-white transition-all duration-300 drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)]" style="font-family: 'Oswald', sans-serif;">
+      <span class="material-icons text-gray-300 text-3xl">person</span> <span class="contrast-title">Mi Perfil</span>
+    </a>
+    <a *ngIf="isAdmin$ | async" routerLink="/admin/race-entry" class="flex items-center gap-4 bg-black/80 border-2 border-red-600 rounded-2xl px-6 py-5 text-yellow-300 text-xl font-bold shadow-lg hover:bg-red-700 hover:border-white transition-all duration-300 drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)]" style="font-family: 'Oswald', sans-serif;">
+      <span class="material-icons text-yellow-400 text-3xl">admin_panel_settings</span> <span class="contrast-title">Admin</span>
+    </a>
+    <button (click)="logout()" class="flex items-center gap-4 bg-black/80 border-2 border-red-600 rounded-2xl px-6 py-5 text-red-400 text-xl font-bold shadow-lg hover:bg-red-700 hover:border-white transition-all duration-300 w-full justify-center mt-2 drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)]" style="font-family: 'Oswald', sans-serif;">
+      <span class="material-icons text-red-400 text-3xl">logout</span> <span class="contrast-title">Salir</span>
+    </button>
+  </div>
+
+  <!-- Footer -->
+  <footer class="relative z-20 mt-auto mb-4 text-center text-gray-300 text-sm drop-shadow-lg">
+    <p>&copy; {{ getCurrentYear() }} Autódromo Monclova. Potenciado por la velocidad.</p>
+  </footer>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Inter:wght@400;600&display=swap');
+    @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+    body { font-family: 'Inter', Arial, sans-serif; }
+    h1, h2, h3, .contrast-title { font-family: 'Oswald', 'Bebas Neue', Arial Black, sans-serif; }
+    .contrast-title {
+      color: #fff !important;
+      text-shadow: 0 2px 8px #000, 0 0px 2px #000, 0 0 12px #000, 0 0 2px #222;
+      letter-spacing: 0.04em;
+      padding: 2px 8px;
+      border-radius: 0.5rem;
+      background: rgba(0,0,0,0.38);
+      font-weight: 900;
+    }
+  </style>
+</div>

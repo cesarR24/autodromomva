@@ -1,0 +1,88 @@
+<div class="relative min-h-screen w-full flex flex-col items-center justify-start bg-black overflow-x-hidden">
+  <img src="/background.jpg" alt="Fondo puntos" class="fixed inset-0 w-full h-full object-cover z-0 opacity-80" />
+  <div class="fixed inset-0 bg-gradient-to-b from-black/90 via-black/70 to-black/90 z-10"></div>
+  <div class="relative z-20 w-full">
+    <div class="container mx-auto p-6">
+      <a routerLink="/dashboard" class="inline-flex items-center mb-4 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded transition font-medium shadow">
+        <span class="mr-2">&#8592;</span> Volver
+      </a>
+      <h1 class="text-3xl font-bold contrast-title mb-6">Puntos Generales</h1>
+
+      <ng-container *ngIf="!isLoading && !errorMessage; else loadingOrError">
+        <div *ngIf="overallPoints.length === 0" class="text-gray-500 text-center py-8">
+          No hay puntos disponibles
+        </div>
+        <div *ngIf="overallPoints.length > 0" class="overflow-x-auto">
+          <table class="min-w-full bg-white border border-gray-300 rounded-lg shadow">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b">
+                  Posición
+                </th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b">
+                  Piloto
+                </th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b">
+                  Equipo
+                </th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b">
+                  Puntos
+                </th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b">
+                  Carreras
+                </th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b">
+                  Victorias
+                </th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b">
+                  Podios
+                </th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <tr *ngFor="let point of overallPoints; let i = index" class="hover:bg-gray-50">
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border-b">
+                  {{ i + 1 }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border-b">
+                  {{ point.driverName || '-' }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-b">
+                  {{ point.team || '-' }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-blue-600 border-b">
+                  {{ point.points || 0 }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-b">
+                  {{ point.races || 0 }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-b">
+                  {{ point.wins || 0 }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-b">
+                  {{ point.podiums || 0 }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </ng-container>
+      <ng-template #loadingOrError>
+        <div *ngIf="isLoading" class="text-blue-500 text-center py-8">Cargando puntos...</div>
+        <div *ngIf="errorMessage" class="text-red-600 text-center py-8">{{ errorMessage }}</div>
+      </ng-template>
+    </div>
+  </div>
+</div>
+
+<style>
+  .contrast-title {
+    color: #fff !important;
+    text-shadow: 0 2px 8px #000, 0 0px 2px #000, 0 0 12px #000, 0 0 2px #222;
+    letter-spacing: 0.04em;
+    padding: 2px 8px;
+    border-radius: 0.5rem;
+    background: rgba(0,0,0,0.38);
+    font-weight: 900;
+  }
+</style>
