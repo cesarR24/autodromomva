@@ -19,15 +19,27 @@
       <div *ngIf="activeTab === 'resultados'" class="max-w-2xl mx-auto bg-white rounded-lg shadow-md p-6 mb-10">
         <form [formGroup]="raceForm" (ngSubmit)="onSubmit()" class="space-y-6">
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Piloto ganador</label>
-            <select formControlName="winnerId" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Piloto</label>
+            <select formControlName="driverId" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
               <option value="">Seleccionar piloto...</option>
               <option *ngFor="let p of driverProfiles" [value]="p.id">{{ p.name }}</option>
             </select>
           </div>
           <div>
-            <label for="elapsedTime" class="block text-sm font-medium text-gray-700 mb-2">Tiempo Transcurrido (segundos)</label>
+            <label for="reactionTime" class="block text-sm font-medium text-gray-700 mb-2">Tiempo de Reacción (RT, segundos)</label>
+            <input id="reactionTime" type="number" step="0.001" formControlName="reactionTime" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+          </div>
+          <div>
+            <label for="elapsedTime" class="block text-sm font-medium text-gray-700 mb-2">Tiempo de Recorrido (ET, segundos)</label>
             <input id="elapsedTime" type="number" step="0.001" formControlName="elapsedTime" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+          </div>
+          <div>
+            <label for="dialIn" class="block text-sm font-medium text-gray-700 mb-2">Dial-in (Tiempo Predicho, segundos)</label>
+            <input id="dialIn" type="number" step="0.001" formControlName="dialIn" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+          </div>
+          <div class="flex items-center">
+            <input id="didBreakout" type="checkbox" formControlName="didBreakout" class="mr-2">
+            <label for="didBreakout" class="block text-sm font-medium text-gray-700">Breakout (¿Rompió el Dial-in?)</label>
           </div>
           <div>
             <label for="maxSpeed" class="block text-sm font-medium text-gray-700 mb-2">Velocidad Máxima (km/h)</label>

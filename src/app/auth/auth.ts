@@ -50,7 +50,6 @@ export class AuthService {
 
   async register(email: string, password: string) {
     if (!this.isAuthEnabled) {
-      console.log('Modo desarrollo: registro simulado');
       return Promise.resolve({ user: this.currentUserSubject.value });
     }
     const cred = await createUserWithEmailAndPassword(this.auth, email, password);
@@ -67,7 +66,6 @@ export class AuthService {
 
   async login(email: string, password: string) {
     if (!this.isAuthEnabled) {
-      console.log('Modo desarrollo: login simulado');
       return Promise.resolve({ user: this.currentUserSubject.value });
     }
     return signInWithEmailAndPassword(this.auth, email, password);
@@ -75,7 +73,6 @@ export class AuthService {
 
   async logout() {
     if (!this.isAuthEnabled) {
-      console.log('Modo desarrollo: logout simulado');
       this.currentUserSubject.next(null);
       return Promise.resolve();
     }
@@ -84,7 +81,6 @@ export class AuthService {
 
   async signInWithCustomToken(token: string) {
     if (!this.isAuthEnabled) {
-      console.log('Modo desarrollo: signInWithCustomToken simulado');
       return Promise.resolve({ user: this.currentUserSubject.value });
     }
     return signInWithCustomToken(this.auth, token);
@@ -92,7 +88,6 @@ export class AuthService {
 
   async signInAnonymously() {
     if (!this.isAuthEnabled) {
-      console.log('Modo desarrollo: signInAnonymously simulado');
       return Promise.resolve({ user: this.currentUserSubject.value });
     }
     return signInAnonymously(this.auth);
@@ -115,7 +110,6 @@ export class AuthService {
 
   async updateProfileName(uid: string, name: string, team?: string) {
     if (!this.isAuthEnabled) {
-      console.log('Modo desarrollo: updateProfileName simulado');
       return Promise.resolve();
     }
     // Actualizar displayName en Auth

@@ -28,6 +28,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
   notifiedMatches: Set<string> = new Set();
   bracketsSub: Subscription | null = null;
 
+  tournament: any = null;
+  seasonPoints: number | null = null;
+  tournamentPoints: number | null = null; // Placeholder para futuro
+  tournamentsSub: Subscription | null = null;
+  overallPointsSub: Subscription | null = null;
+
   constructor(
     private authService: AuthService,
     private dataService: DataService,
@@ -38,11 +44,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.loadUserData();
+    this.loadTournamentData();
+    this.loadSeasonPoints();
   }
 
   ngOnDestroy() {
     if (this.timerInterval) clearInterval(this.timerInterval);
     if (this.bracketsSub) this.bracketsSub.unsubscribe();
+    if (this.tournamentsSub) this.tournamentsSub.unsubscribe();
+    if (this.overallPointsSub) this.overallPointsSub.unsubscribe();
   }
 
   private async loadUserData() {
@@ -69,7 +79,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private async loadUserProfile(userId: string) {
     try {
       this.userProfile = await this.dataService.getCurrentUserProfile(userId);
-      console.log('User profile loaded:', this.userProfile); // Debug
     } catch (error) {
       console.error('Error loading user profile:', error);
     }
@@ -114,25 +123,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
     
     // Escuchar todos los brackets en tiempo real
     this.bracketsSub = this.dataService.getAllBracketsObservable().subscribe((brackets: any[]) => {
-      console.log('Dashboard received brackets:', brackets.length); // Debug
-      console.log('User profile:', this.userProfile); // Debug
-      
       if (!this.userProfile) {
-        console.log('No user profile available'); // Debug
         return;
       }
       
       let found = false;
       for (const bracket of brackets) {
         for (const match of bracket.matches || []) {
-          console.log('Checking match:', match.id, 'PlayerA:', match.playerA?.id, 'PlayerB:', match.playerB?.id, 'User:', this.userProfile.id); // Debug
-          
           if (
             (match.playerA?.id === this.userProfile.id || match.playerB?.id === this.userProfile.id) &&
             match.timerStartedAt && !match.winner
           ) {
-            console.log('Found active timer for user!'); // Debug
-            
             // Calcular tiempo restante
             const now = Date.now();
             const elapsed = Math.floor((now - match.timerStartedAt) / 1000);
@@ -142,7 +143,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
             
             // Lanzar toaster solo una vez por match
             if (!this.notifiedMatches.has(match.id)) {
-              console.log('Showing toaster notification'); // Debug
               this.showToaster = true;
               this.toasterMessage = '¡Prepárate! El temporizador para tu carrera ha iniciado. Si no estás listo cuando termine el tiempo, serás descalificado automáticamente.';
               this.notifiedMatches.add(match.id);
@@ -169,7 +169,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
       }
       
       if (!found) {
-        console.log('No active timer found for user'); // Debug
         this.activeMatchTimer = null;
         this.showTimer = false;
       }
@@ -181,5 +180,21 @@ export class DashboardComponent implements OnInit, OnDestroy {
     const min = Math.floor(this.activeMatchTimer.remaining / 60).toString().padStart(2, '0');
     const sec = (this.activeMatchTimer.remaining % 60).toString().padStart(2, '0');
     return `${min}:${sec}`;
+  }
+
+  private loadTournamentData() {
+    this.tournamentsSub = this.dataService.getTournaments().subscribe(tournaments => {
+      // Selecciona el torneo activo (no completado)
+      this.tournament = tournaments.find((t: any) => t.currentStage && t.currentStage !== 'Completed') || null;
+    });
+  }
+
+  private loadSeasonPoints() {
+    this.overallPointsSub = this.dataService.getOverallPoints().subscribe(pointsArr => {
+      if (!this.userProfile) return;
+      const year = new Date().getFullYear();
+      const userPoints = pointsArr.find((p: any) => p.driverProfileId === this.userProfile.id && p.seasonYear === year);
+      this.seasonPoints = userPoints ? userPoints.totalSeasonPoints : 0;
+    });
   }
 }

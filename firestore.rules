@@ -3,7 +3,7 @@ service cloud.firestore {
   match /databases/{database}/documents {
     // Permitir lectura y escritura para todas las colecciones en desarrollo
     match /{document=**} {
-      allow read, write: if true;
+      allow read, write: if request.auth != null;
     }
   }
 } 

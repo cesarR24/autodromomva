@@ -43,6 +43,9 @@
     <a routerLink="/profile" class="flex items-center gap-4 bg-black/80 border-2 border-red-600 rounded-2xl px-6 py-5 text-white text-xl font-bold shadow-lg hover:bg-red-700 hover:border-white transition-all duration-300 drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)]" style="font-family: 'Oswald', sans-serif;">
       <span class="material-icons text-gray-300 text-3xl">person</span> <span class="contrast-title">Mi Perfil</span>
     </a>
+    <a routerLink="/scoreboard" class="flex items-center gap-4 bg-black/80 border-2 border-cyan-500 rounded-2xl px-6 py-5 text-cyan-300 text-xl font-bold shadow-lg hover:bg-cyan-700 hover:border-white transition-all duration-300 drop-shadow-[0_2px_6px_rgba(0,255,255,0.3)]" style="font-family: 'Oswald', sans-serif;">
+      <span class="material-icons text-cyan-400 text-3xl">scoreboard</span> <span class="contrast-title">Scoreboard</span>
+    </a>
     <a *ngIf="isAdmin$ | async" routerLink="/admin/race-entry" class="flex items-center gap-4 bg-black/80 border-2 border-red-600 rounded-2xl px-6 py-5 text-yellow-300 text-xl font-bold shadow-lg hover:bg-red-700 hover:border-white transition-all duration-300 drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)]" style="font-family: 'Oswald', sans-serif;">
       <span class="material-icons text-yellow-400 text-3xl">admin_panel_settings</span> <span class="contrast-title">Admin</span>
     </a>

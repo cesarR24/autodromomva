@@ -62,12 +62,12 @@ export class AdminRaceEntryComponent implements OnInit {
     private router: Router
   ) {
     this.raceForm = this.fb.group({
-      eventName: ['', Validators.required],
-      carNumber: ['', [Validators.required, Validators.min(1)]],
+      driverId: ['', Validators.required],
+      reactionTime: ['', Validators.required],
       elapsedTime: ['', Validators.required],
-      maxSpeed: ['', Validators.required],
-      trackCondition: ['', Validators.required],
-      temperature: ['', Validators.required]
+      dialIn: ['', Validators.required],
+      didBreakout: [false, Validators.required],
+      maxSpeed: ['', Validators.required]
     });
   }
 
@@ -84,8 +84,11 @@ export class AdminRaceEntryComponent implements OnInit {
   // Inicializar el formulario de resultados manuales con los nuevos campos
   initRaceForm() {
     this.raceForm = this.fb.group({
-      winnerId: ['', Validators.required],
+      driverId: ['', Validators.required],
+      reactionTime: ['', Validators.required],
       elapsedTime: ['', Validators.required],
+      dialIn: ['', Validators.required],
+      didBreakout: [false, Validators.required],
       maxSpeed: ['', Validators.required]
     });
   }
@@ -203,34 +206,19 @@ export class AdminRaceEntryComponent implements OnInit {
 
   async onSubmit() {
     if (this.raceForm.valid) {
-      this.isLoading = true;
-      this.successMessage = '';
-      this.errorMessage = '';
-
+      const formData = this.raceForm.value;
+      const piloto = this.driverProfiles.find(p => p.id === formData.driverId);
+      const raceResult = {
+        ...formData,
+        driverId: formData.driverId,
+        driverName: piloto?.name || '',
+      };
       try {
-        const formData = this.raceForm.value;
-        const piloto = this.driverProfiles.find(p => p.id === formData.winnerId);
-        const raceResult = {
-          ...formData,
-          driverName: piloto ? piloto.name : '',
-          timestamp: new Date().toISOString(),
-          id: Date.now().toString()
-        };
-
-        console.log('Enviando datos al servidor:', raceResult);
         await this.dataService.addRaceResult(raceResult);
-        this.successMessage = 'Resultado de carrera agregado exitosamente';
+        this.successMessage = 'Resultado guardado correctamente';
         this.raceForm.reset();
       } catch (error: any) {
-        console.error('Error completo:', error);
-        this.errorMessage = `Error al agregar el resultado: ${error.message || 'Error desconocido'}`;
-        
-        // Mostrar información adicional para debug
-        if (error.code) {
-          this.errorMessage += ` (Código: ${error.code})`;
-        }
-      } finally {
-        this.isLoading = false;
+        this.errorMessage = error.message || 'Error al guardar el resultado';
       }
     }
   }

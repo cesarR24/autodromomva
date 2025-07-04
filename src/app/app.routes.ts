@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './auth/auth-guard';
 import { adminGuard } from './auth/admin-guard';
+import { DashboardScoreboardComponent } from './dashboard/dashboard-scoreboard';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
@@ -36,5 +37,6 @@ export const routes: Routes = [
   {
     path: 'profile',
     loadComponent: () => import('./profile/profile-edit').then(m => m.ProfileEditComponent)
-  }
+  },
+  { path: 'scoreboard', loadComponent: () => import('./dashboard/dashboard-scoreboard').then(m => m.DashboardScoreboardComponent) },
 ];

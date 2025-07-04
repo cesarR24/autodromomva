@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { AuthService } from './auth/auth';
 import { getFirestore, collection, doc, addDoc, setDoc, getDoc, onSnapshot, query, connectFirestoreEmulator, getDocs, deleteDoc, where } from 'firebase/firestore';
 import { initializeFirebase } from './firebase.config';
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 interface Participant {
   id: string;
@@ -34,9 +35,6 @@ export class DataService {
     // Inicializar Firebase usando la configuración centralizada
     initializeFirebase();
     this.db = getFirestore();
-    
-    // Log para debug
-    console.log('DataService inicializado con Firestore:', this.db);
   }
 
   getRaceResults(): Observable<any[]> {
@@ -62,14 +60,12 @@ export class DataService {
 
   async addRaceResult(data: any): Promise<any> {
     try {
-      console.log('Intentando agregar race result:', data);
       const colRef = collection(this.db, 'raceResults');
       const result = await addDoc(colRef, {
         ...data,
         createdAt: new Date(),
         updatedAt: new Date()
       });
-      console.log('Race result agregado exitosamente:', result.id);
       return result;
     } catch (error: any) {
       console.error('Error al agregar race result:', error);
@@ -339,5 +335,21 @@ export class DataService {
     const docRef = doc(this.db, 'driverProfiles', uid);
     const docSnap = await getDoc(docRef);
     return docSnap.exists() ? { id: docSnap.id, ...docSnap.data() } : null;
+  }
+
+  async uploadTeamLogo(uid: string, file: File): Promise<string> {
+    try {
+      const storage = getStorage();
+      const filePath = `team-logos/${uid}/${Date.now()}_${file.name}`;
+      const storageRef = ref(storage, filePath);
+      await uploadBytes(storageRef, file);
+      const url = await getDownloadURL(storageRef);
+      // Actualizar el perfil del usuario con la nueva URL
+      await this.setDriverProfile(uid, { teamLogoUrl: url });
+      return url;
+    } catch (error) {
+      console.error('Error al subir el logo del equipo:', error);
+      throw error;
+    }
   }
 }

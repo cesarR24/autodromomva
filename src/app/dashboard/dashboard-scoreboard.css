@@ -1,0 +1,100 @@
+/* Estilos base para el layout scoreboard */
+.dashboard-scoreboard {
+  min-height: 100vh;
+  position: relative;
+}
+.dashboard-scoreboard::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background: url('/background3.jpg') no-repeat center center fixed;
+  background-size: cover;
+  opacity: 1;
+  pointer-events: none;
+}
+.dashboard-scoreboard::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  background: rgba(0,0,0,0.7);
+  pointer-events: none;
+}
+.dashboard-scoreboard > * {
+  position: relative;
+  z-index: 2;
+}
+.dashboard-scoreboard .shadow {
+  box-shadow: 0 4px 24px 0 rgba(0,0,0,0.4);
+}
+.dashboard-scoreboard .rounded-xl {
+  border-radius: 1rem;
+}
+.dashboard-scoreboard .border-l-4, .dashboard-scoreboard .border-r-4, .dashboard-scoreboard .border-4 {
+  border-width: 4px;
+}
+.dashboard-scoreboard .bg-black\/80 {
+  background: rgba(0,0,0,0.8);
+}
+.dashboard-scoreboard .bg-cyan-900\/60 {
+  background: rgba(22,78,99,0.6);
+}
+.dashboard-scoreboard .text-cyan-300 {
+  color: #67e8f9;
+}
+.dashboard-scoreboard .text-yellow-300 {
+  color: #fde68a;
+}
+.dashboard-scoreboard .text-yellow-200 {
+  color: #fef9c3;
+}
+.dashboard-scoreboard .border-cyan-500 {
+  border-color: #06b6d4;
+}
+.dashboard-scoreboard .border-cyan-700 {
+  border-color: #0e7490;
+}
+.dashboard-scoreboard .border-red-500 {
+  border-color: #ef4444;
+}
+.dashboard-scoreboard .border-yellow-400 {
+  border-color: #facc15;
+}
+.dashboard-scoreboard .font-mono {
+  font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
+}
+@media (max-width: 900px) {
+  .dashboard-scoreboard {
+    grid-template-columns: 1fr;
+  }
+}
+.ranking-scroll-container {
+  height: 16rem;
+  overflow: hidden;
+  position: relative;
+}
+.ranking-scroll-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  animation: ranking-scroll 18s linear infinite;
+}
+@keyframes ranking-scroll {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-50%); }
+}
+.ranking-scroll-list li {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  white-space: nowrap;
+  gap: 0.5rem;
+}
+.mini-stats-line {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  white-space: nowrap;
+  gap: 0.5rem;
+} 
